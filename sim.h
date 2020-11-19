@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <string>
+#include <fstream>
 #include "params.h"
 #include "Particle.h"
 #include "initial_conditions.h"
@@ -16,6 +18,7 @@ public:
 	Simulation(vector<Particle> particles);
 	void add_snapshot(double t, vector<Particle> new_rs);
 	void print();
+	void save(string filename = "simulation.dat");
 };
 
 

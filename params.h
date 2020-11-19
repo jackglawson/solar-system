@@ -7,7 +7,7 @@ class Particle;			// Need this because of circular include
 using namespace std;
 
 
-namespace ICs {
+namespace ICr {
 
 	namespace UniformSphere {
 		extern double max_r;
@@ -18,6 +18,18 @@ namespace ICs {
 		extern double max_r;
 		extern double width;
 	};
+}
+
+
+namespace ICv {
+
+	namespace no_velocity {
+		;
+	}
+
+	namespace orbit_central_mass {
+		extern double central_mass;
+	}
 }
 
 
@@ -39,10 +51,11 @@ namespace p {
 	extern int num_particles;				
 	extern double min_m;
 	extern double max_m;
-	extern int ic_type;
-
-	// Initial condition adjustment parameters
-	extern int ica_type;
+	extern int icr_type;
+	extern int icv_type;
+	extern double min_random_v;
+	extern double max_random_v;
+	extern 	int radius_type;
 
 	// Simulation parameters
 	extern double tot_t;

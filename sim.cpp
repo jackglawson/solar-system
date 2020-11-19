@@ -15,25 +15,52 @@ void Simulation::add_snapshot(double t, vector<Particle> particles) {
 
 void Simulation::print() {
 	cout << "SIMULATION RESULT:\n\n";
-	for (int i = 0; i < timestamps.size(); i++) {
-		cout << "t = " << timestamps[i] << "\n";
-		for (int j = 0; j < snapshots[i].size(); j++) {
-			snapshots[i][j].print();
+	for (int t = 0; t < timestamps.size(); t++) {
+		cout << "t = " << timestamps[t] << "\n";
+		for (int i = 0; i < snapshots[t].size(); i++) {
+			snapshots[t][i].print();
 		}
 		cout << "\n";
 	}
 }
 
 
+void Simulation::save(string filename) {
+	// save to a .dat file
+
+	ofstream outf{ filename };
+
+	if (!outf)
+	{
+		std::cerr << filename << " could not be opened for writing!" << std::endl;
+		exit(1);
+	}
+
+	cout << "Saving to " << filename << "\n";
+
+	outf << "timestamp rx ry rz m radius" << "\n";
+	for (int t = 0; t < timestamps.size(); t++) {
+		for (int i = 0; i < snapshots[t].size(); i++) {
+			outf << timestamps[t] << " ";
+			Particle particle = snapshots[t][i];
+			vector<double> r = particle.get_r();
+			outf << r[0] << " ";
+			outf << r[1] << " ";
+			outf << r[2] << " ";
+			outf << particle.get_m() << " ";
+			outf << particle.get_radius() << " ";
+			outf << "\n";
+		}
+	}
+
+	cout << "Saved\n";
+}
+
+
 Simulation run_sim() {
 
-	vector<Particle> particles;
-	particles.push_back(Particle(vector<double>{0, 0, 0}, vector<double>{0, 0, 0}, 1, 0));
-	particles.push_back(Particle(vector<double>{1, 0, 0}, vector<double>{0, 0, 0}, 1, 0));
-
-
+	vector<Particle> particles = generate_ics();
 	Simulation simulation{particles};
-
 
 	double t = 0;
 	while (t < p::tot_t) {

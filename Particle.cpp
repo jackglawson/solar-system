@@ -30,10 +30,10 @@ double Particle::get_m() {
 }
 
 double Particle::get_radius() {
-	if (radius_type == 0) {
+	switch (radius_type) {
+	case 0:
 		return RadiiFunctions::Fixed::radius;
-	}
-	else if (radius_type == 1) {
+	case 1:
 		return RadiiFunctions::ConstDensity::get_radius(m);
 	}
 }
@@ -42,11 +42,9 @@ void Particle::set_r(vector<double> r_in) {
 	r = r_in;
 }
 
-
 void Particle::set_v(vector<double> v_in) {
 	v = v_in;
 }
-
 
 void Particle::print() {
 	cout << "Particle:\n";

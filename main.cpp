@@ -3,6 +3,7 @@
 
 int main() {
 	Simulation sim = run_sim();
-	sim.print();
+	sim.save();
+	// sim.print();
 	return 0;
 }

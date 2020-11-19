@@ -115,3 +115,8 @@ vector<vector<double>> add_vectors(vector<vector<double>> v1, vector<vector<doub
 	}
 	return v1;
 }
+
+
+//vector<Particle> combine_overlapping_particles(vector<Particle> particles) {
+//
+//}
