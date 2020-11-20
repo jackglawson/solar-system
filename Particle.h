@@ -22,6 +22,7 @@ public:
 	vector<double> get_r();
 	vector<double> get_v();
 	double get_m();
+	int get_radius_type();
 	double get_radius();
 
 	void set_r(vector<double> r);
