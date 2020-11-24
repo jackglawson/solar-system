@@ -74,6 +74,9 @@ namespace p {
 	extern double h_min;
 	extern double h_max;
 	extern int flag;
+
+	// Collision settings
+	extern int max_collision_checks;
 									
 	// Octree settings
 	extern double qt;

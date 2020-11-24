@@ -73,9 +73,19 @@ unordered_set<vector<int>, VectorHash> sweep_and_prune(vector<vector<double>> bo
 }
 
 
-unordered_set<vector<int>, VectorHash> broad_phase(vector<Particle> particles) {
-	// Generate a list of balls which could potentially intersect.
+bool check_collision(Particle p1, Particle p2) {
+	// Check if two particles actually collide
+	double d = dist(p1.get_r(), p2.get_r());
+	return d < p1.get_radius() + p2.get_radius();
+}
+
+
+vector<int> find_colliding_pair(vector<Particle> particles) {
+	// Searches for collisions between particles. Stops when the first colliding pair is found.
+	// Returns vector<int>{0,0} if there are no collisions.
+	// The algorithm first checks if particles are *potentially intersecting*.
 	// Two particles potentially intersect iff their bounding cubes intersect.
+	// Then, the positions and radii are inspected to check if they actaully collide.
 
 	vector<vector<double>> x_bounds(particles.size(), vector<double>{0, 0});
 	vector<vector<double>> y_bounds(particles.size(), vector<double>{0, 0});
@@ -92,51 +102,35 @@ unordered_set<vector<int>, VectorHash> broad_phase(vector<Particle> particles) {
 	unordered_set<vector<int>, VectorHash> y_collisions = sweep_and_prune(y_bounds);
 	unordered_set<vector<int>, VectorHash> z_collisions = sweep_and_prune(z_bounds);
 
-	unordered_set<vector<int>, VectorHash> potentially_colliding_pairs{};
 	for (unordered_set<vector<int>>::iterator itr = x_collisions.begin(); itr != x_collisions.end(); itr++) {
 		vector<int> pair = *itr;
 		if (y_collisions.find(pair) != y_collisions.end() || y_collisions.find(vector<int> {pair[1], pair[0]}) != y_collisions.end()) {
 			if (z_collisions.find(pair) != z_collisions.end() || z_collisions.find(vector<int> {pair[1], pair[0]}) != z_collisions.end()) {
-				potentially_colliding_pairs.insert(pair);
+				if (check_collision(particles[pair[0]], particles[pair[1]])) {
+					return pair;
+				}
 			}
 		}
 	}
-	return potentially_colliding_pairs;
+	return vector<int>{0, 0};
 }
 
 
-bool narrow_phase(Particle p1, Particle p2) {
-	// Check if two particles actually collide
-	double d = dist(p1.get_r(), p2.get_r());
-	return d < p1.get_radius() + p2.get_radius();
-}
-
-
-vector<Particle> do_collisions(vector<Particle> particles) {
-	// Detect collisions, erase the particles which collided, then create the new particle
-
-	unordered_set<vector<int>, VectorHash> colliding_pairs = broad_phase(particles);
-	for (unordered_set<vector<int>>::iterator itr = colliding_pairs.begin(); itr != colliding_pairs.end(); itr++) {
-		vector<int> pair = *itr;
-		if (!narrow_phase(particles[pair[0]], particles[pair[1]])) {
-			colliding_pairs.erase(pair);
+void do_collisions(vector<Particle>& particles) {
+	// while there are still colliding particles
+	for (int i = 0; i < p::max_collision_checks; i++) {
+		vector<int> pair = find_colliding_pair(particles);
+		if (pair == vector<int>{0, 0}) {
+			return;
 		}
-	}
-
-	cout << colliding_pairs.size() << " pairs of particles are colliding!\n";
-
-	for (unordered_set<vector<int>>::iterator itr = colliding_pairs.begin(); itr != colliding_pairs.end(); itr++) {
-		vector<int> pair = *itr;
-		sort(pair.begin(), pair.end());
 
 		cout << "Particles " << pair[0] << " and " << pair[1] << " are colliding\n";
 
+		sort(pair.begin(), pair.end());
 		Particle p1 = particles[pair[0]];
 		Particle p2 = particles[pair[1]];
 		particles.erase(particles.begin() + pair[1]);
 		particles.erase(particles.begin() + pair[0]);
 		particles.push_back(Particle(p1, p2));
 	}
-
-	return particles;
 }

@@ -74,7 +74,7 @@ namespace p {
 									// 1 ... constant density radius
 	
 	// Simulation parameters
-	double tot_t = 5;
+	double tot_t = 10;
 	double dt = 0.05;				// time between frames
 	double G = 1;
 	bool gravity_on = true;
@@ -93,6 +93,9 @@ namespace p {
 									// flag = 0 ... error is absolute
 									// flag = 1 ... error is relative
 									// flag = 2 ... error is mixed
+
+	// Collision settings
+	int max_collision_checks = 1000;	// once this many collisions have been detected in a single step, the program will exit
 
 	// Octree settings
 	double qt = 1;

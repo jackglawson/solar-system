@@ -22,6 +22,5 @@ public:
 };
 
 
-Simulation run_sim();
-
+Simulation run_sim(vector<Particle> particles = vector<Particle>{});
 

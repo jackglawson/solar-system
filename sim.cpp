@@ -57,9 +57,12 @@ void Simulation::save(string filename) {
 }
 
 
-Simulation run_sim() {
+Simulation run_sim(vector<Particle> particles) {
 
-	vector<Particle> particles = generate_ics();
+	if (particles.size() == 0) {
+		particles = generate_ics();
+	}
+
 	Simulation simulation{particles};
 
 	double t = 0;

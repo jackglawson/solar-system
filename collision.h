@@ -8,4 +8,4 @@
 using namespace std;
 
 
-vector<Particle> do_collisions(vector<Particle> particles);
+void do_collisions(vector<Particle>& particles);
