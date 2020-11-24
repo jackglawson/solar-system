@@ -44,6 +44,14 @@ OctreeNode::OctreeNode(vector<double> centre, double width, vector<vector<double
 	}
 }
 
+OctreeNode::~OctreeNode() {
+	if (has_children) {
+		for (int i = 0; i < 8; i++) {
+			delete children[i];
+		}
+	}
+}
+
 
 void OctreeNode::print() {
 	cout << "Node at ";
