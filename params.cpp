@@ -74,8 +74,8 @@ namespace p {
 									// 1 ... constant density radius
 	
 	// Simulation parameters
-	double tot_t = 10;
-	double dt = 0.05;				// time between frames
+	double tot_t = 1;
+	double dt = 0.01;				// time between frames
 	double G = 1;
 	bool gravity_on = true;
 	bool collisions_on = true;

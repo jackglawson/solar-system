@@ -68,8 +68,9 @@ Simulation run_sim(vector<Particle> particles) {
 	double t = 0;
 	while (t < p::tot_t) {
 		double next_t = t + p::dt;
+		cout << "Walking to t=" << next_t << "\n";
 		particles = walk_to(t, next_t, particles);
-		simulation.add_snapshot(next_t, particles);
+		simulation.add_snapshot(next_t, particles); // not the leak
 		t = next_t;
 	}
 

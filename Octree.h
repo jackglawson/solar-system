@@ -2,6 +2,10 @@
 #include "OctreeNode.h"
 #include "Particle.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 class Octree {
 public:
 	OctreeNode* root;
