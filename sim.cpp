@@ -1,9 +1,9 @@
 #include "sim.h"
 
 
-Simulation::Simulation(vector<shared_ptr<Particle>> particles) {
+Simulation::Simulation(vector<Particle*> particles) {
 	timestamps = vector<double>{ 0 };
-	//snapshots = vector<unique_ptr<Particle>>{ particles };
+	snapshots = vector<vector<Particle*>>{ particles };
 }
 
 
@@ -57,7 +57,7 @@ Simulation::Simulation(vector<shared_ptr<Particle>> particles) {
 //}
 
 
-Simulation run_sim(vector<shared_ptr<Particle>> particles) {
+Simulation run_sim(vector<Particle*> particles) {
 
 	//if (particles.size() == 0) {
 	//	particles = generate_ics();

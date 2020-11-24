@@ -11,4 +11,4 @@
 #include "collision.h"
 using namespace std;
 
-vector<shared_ptr<Particle>> walk_to(double t_from, double t_to, vector<shared_ptr<Particle>> y0);
+vector<Particle*> walk_to(double t_from, double t_to, vector<Particle*> y0);
