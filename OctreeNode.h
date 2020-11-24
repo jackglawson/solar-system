@@ -18,7 +18,6 @@ private:
 
 public:
 	OctreeNode(vector<double> centre, double width, vector<vector<double>> rs, vector<double> ms);
-	~OctreeNode();
 
 	void print();
 	void print_children();
