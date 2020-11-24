@@ -14,7 +14,7 @@
 
 
 int main() {
-	// Try making a deconstructor method for the particle class?
+	// leaking memory in octree! 
 
 	vector<Particle*> particles;
 

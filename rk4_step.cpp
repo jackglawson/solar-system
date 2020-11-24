@@ -47,6 +47,7 @@ void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
     vf = add_vectors(vs, multiply_vector(vk1, 0.5));
 
     // First intermediate step
+    // Do we lose pointers to allocated memory here?
     octree = Octree(rf, ms);
     acc = octree.find_all_accs(rf, ms, radii);
     rk2 = multiply_vector(vs, h);
