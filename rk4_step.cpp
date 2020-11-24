@@ -1,6 +1,6 @@
 #include "rk4_step.h"
 
-void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
+void rk4_fixed_step(double& t, vector<shared_ptr<Particle>>& particles, double h) {
     /*
       Function to advance set of coupled first-order o.d.e.s by single step
       using fixed step-length fourth-order Runge-Kutta scheme
@@ -86,7 +86,7 @@ void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
 }
 
 
-void rk4_adaptive_step(double& t, vector<Particle*>& y,
+void rk4_adaptive_step(double& t, vector<shared_ptr<Particle>>& y,
     double& h, double& t_err, double acc,
     double S, int& rept, int maxrept,
     double h_min, double h_max, int flag)
@@ -129,7 +129,7 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     int n = y.size();
 
     // Declare local arrays
-    vector<Particle*> y0(n), y1(n);
+    vector<shared_ptr<Particle>> y0(n), y1(n);
 
     // Declare repetition counter
     static int count = 0;
@@ -241,8 +241,6 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
         rk4_adaptive_step(t, y, h, t_err, acc,
             S, rept, maxrept, h_min, h_max, flag);
     }
-
-    y0.clear();
 
     return;
 }
