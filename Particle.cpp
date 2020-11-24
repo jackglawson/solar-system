@@ -25,14 +25,17 @@ Particle::Particle(Particle p1, Particle p2) {
 
 	vector<double> r1 = p1.get_r();
 	vector<double> r2 = p2.get_r();
-	vector<double> r(3);
+	r = vector<double>(3, 0);
+
 	vector<double> v1 = p1.get_v();
 	vector<double> v2 = p2.get_v();
-	vector<double> v(3);
+	v = vector<double>(3, 0);
+
 	for (int i = 0; i < 3; i++) {
 		r[i] = (m1 * r1[i] + m2 * r2[i]) / m;
 		v[i] = (m1 * v1[i] + m2 * v2[i]) / m;
 	}
+
 
 	if (p1.get_radius_type() == 0 or p2.get_radius_type() == 0) {
 		radius_type = 0;

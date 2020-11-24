@@ -11,6 +11,8 @@ vector<Particle> walk_to(double t_from, double t_to, vector<Particle> y0) {
 
     while (t < t_to) {
         rk4_adaptive_step(t, y, h, t_err, p::acc, p::S, rept, p::maxrept, p::h_min, p::h_max, p::flag);
+        // make this in-line
+        // y = do_collisions(y);
         cout << "Stepping to t = " << t << "\n";
     }
     cout << "Stepping back by " << t - t_to << "\n\n";
