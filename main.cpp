@@ -16,13 +16,16 @@
 int main() {
 	// Try making a deconstructor method for the particle class?
 
+	vector<Particle*> particles;
 
-	vector<Particle> particles;
-	particles.push_back(Particle(vector<double>{0, 0, 0}, vector<double>{0, 0, 0}, 1000, 0));
-	particles.push_back(Particle(vector<double>{5, 0, 0}, vector<double>{0, 20, 0}, 1, 0));	
+	Particle p1 = Particle(vector<double>{0, 0, 0}, vector<double>{0, 0, 0}, 1000, 0);
+	Particle p2 = Particle(vector<double>{5, 0, 0}, vector<double>{0, 20, 0}, 1, 0);
+
+	particles.push_back(&p1);
+	particles.push_back(&p2);	
 
 	Simulation sim = run_sim(particles);
-	sim.save();
+	//sim.save();
 	// sim.print();
 	_CrtDumpMemoryLeaks();
 	return 0;

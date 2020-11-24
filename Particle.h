@@ -22,6 +22,7 @@ public:
 	Particle();
 	Particle(vector<double> r_in, vector<double> v_in, double m_in, int radius_type_in);
 	Particle(Particle p1, Particle p2);			// collide two particles
+	~Particle();
 
 	vector<double> get_r();
 	vector<double> get_v();

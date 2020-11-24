@@ -50,6 +50,12 @@ Particle::Particle(Particle p1, Particle p2) {
 }
 
 
+Particle::~Particle() {
+	vector<double>().swap(r);
+	vector<double>().swap(v);
+}
+
+
 vector<double> Particle::get_r() {
 	return r;
 }

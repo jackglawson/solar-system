@@ -1,6 +1,6 @@
 #include "rk4_step.h"
 
-void rk4_fixed_step(double& t, vector<Particle>& particles, double h) {
+void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
     /*
       Function to advance set of coupled first-order o.d.e.s by single step
       using fixed step-length fourth-order Runge-Kutta scheme
@@ -25,10 +25,11 @@ void rk4_fixed_step(double& t, vector<Particle>& particles, double h) {
     vector<double> ms(n);
     vector<double> radii(n);
     for (int i = 0; i < n; i++) {
-        rs[i] = particles[i].get_r();
-        vs[i] = particles[i].get_v();
-        ms[i] = particles[i].get_m();
-        radii[i] = particles[i].get_radius();
+        Particle p = *particles[i];
+        rs[i] = p.get_r();
+        vs[i] = p.get_v();
+        ms[i] = p.get_m();
+        radii[i] = p.get_radius();
     }
 
     // declare local variables
@@ -75,8 +76,8 @@ void rk4_fixed_step(double& t, vector<Particle>& particles, double h) {
             new_r[j] = rs[i][j] + rk1[i][j] / 6. + rk2[i][j] / 3. + rk3[i][j] / 3. + rk4[i][j] / 6.;
             new_v[j] = vs[i][j] + vk1[i][j] / 6. + vk2[i][j] / 3. + vk3[i][j] / 3. + vk4[i][j] / 6.;
         }
-        particles[i].set_r(new_r);
-        particles[i].set_v(new_v);
+        particles[i]->set_r(new_r);
+        particles[i]->set_v(new_v);
     }
 
     t += h;
@@ -85,7 +86,7 @@ void rk4_fixed_step(double& t, vector<Particle>& particles, double h) {
 }
 
 
-void rk4_adaptive_step(double& t, vector<Particle>& y,
+void rk4_adaptive_step(double& t, vector<Particle*>& y,
     double& h, double& t_err, double acc,
     double S, int& rept, int maxrept,
     double h_min, double h_max, int flag)
@@ -128,7 +129,7 @@ void rk4_adaptive_step(double& t, vector<Particle>& y,
     int n = y.size();
 
     // Declare local arrays
-    vector<Particle> y0(n), y1(n);
+    vector<Particle*> y0(n), y1(n);
 
     // Declare repetition counter
     static int count = 0;
@@ -157,10 +158,11 @@ void rk4_adaptive_step(double& t, vector<Particle>& y,
     if (flag == 0)
     {
         // Use absolute truncation error 
+        // wont work!
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 3; j++) {
-                r_err = fabs(y[i].get_r()[j] - y1[i].get_r()[j]);
-                v_err = fabs(y[i].get_v()[j] - y1[i].get_v()[j]);
+                r_err = fabs(y[i]->get_r()[j] - y1[i]->get_r()[j]);
+                v_err = fabs(y[i]->get_v()[j] - y1[i]->get_v()[j]);
                 err = (r_err > v_err) ? r_err : v_err;
                 t_err = (err > t_err) ? err : t_err;
             }
@@ -169,10 +171,11 @@ void rk4_adaptive_step(double& t, vector<Particle>& y,
     else if (flag == 1)
     {
         // Use relative truncation error
+        // wont work!
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 3; j++) {
-                r_err = fabs((y[i].get_r()[j] - y1[i].get_r()[j]) / y[i].get_r()[j]);
-                v_err = fabs((y[i].get_v()[j] - y1[i].get_v()[j]) / y[i].get_v()[j]);
+                r_err = fabs((y[i]->get_r()[j] - y1[i]->get_r()[j]) / y[i]->get_r()[j]);
+                v_err = fabs((y[i]->get_v()[j] - y1[i]->get_v()[j]) / y[i]->get_v()[j]);
                 err = (r_err > v_err) ? r_err : v_err;
                 t_err = (err > t_err) ? err : t_err;
             }
@@ -183,12 +186,14 @@ void rk4_adaptive_step(double& t, vector<Particle>& y,
         // Use mixed truncation error 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 3; j++) {
-                r_err = fabs((y[i].get_r()[j] - y1[i].get_r()[j]) / y[i].get_r()[j]);
-                v_err = fabs((y[i].get_v()[j] - y1[i].get_v()[j]) / y[i].get_v()[j]);
+                Particle p = *y[i];
+                Particle p1 = *y1[i];
+                r_err = fabs((p.get_r()[j] - p1.get_r()[j]) / p.get_r()[j]);
+                v_err = fabs((p.get_v()[j] - p1.get_v()[j]) / p.get_v()[j]);
                 err1 = (r_err > v_err) ? r_err : v_err;
 
-                r_err = fabs(y[i].get_r()[j] - y1[i].get_r()[j]);
-                v_err = fabs(y[i].get_v()[j] - y1[i].get_v()[j]);
+                r_err = fabs(p.get_r()[j] - p1.get_r()[j]);
+                v_err = fabs(p.get_v()[j] - p1.get_v()[j]);
                 err2 = (r_err > v_err) ? r_err : v_err;
 
                 err = (err1 < err2) ? err1 : err2;
@@ -236,6 +241,8 @@ void rk4_adaptive_step(double& t, vector<Particle>& y,
         rk4_adaptive_step(t, y, h, t_err, acc,
             S, rept, maxrept, h_min, h_max, flag);
     }
+
+    y0.clear();
 
     return;
 }

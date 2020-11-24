@@ -16,15 +16,15 @@ using namespace std;
 class Simulation {
 private:
 	vector<double> timestamps;
-	vector<vector<Particle>> snapshots;
+	vector<vector<Particle*>> snapshots;
 
 public:
-	Simulation(vector<Particle> particles);
-	void add_snapshot(double t, vector<Particle> new_rs);
-	void print();
-	void save(string filename = "simulation.dat");
+	Simulation(vector<Particle*> particles);
+	//void add_snapshot(double t, vector<Particle> new_rs);
+	//void print();
+	//void save(string filename = "simulation.dat");
 };
 
 
-Simulation run_sim(vector<Particle> particles = vector<Particle>{});
+Simulation run_sim(vector<Particle*> particles = vector<Particle*>{});
 
