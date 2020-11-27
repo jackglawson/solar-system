@@ -1,6 +1,20 @@
 #include "OctreeNode.h"
 
 
+
+
+
+OctreeNode::OctreeNode()
+{
+	c = vector<double>{ 0,0,0 };
+	w = 0;
+	num_particles = 0;
+	total_m = 0;
+	com = vector<double>{ 0,0,0 };
+	has_children = false;
+	children = vector<OctreeNode*>{ NULL };
+}
+
 OctreeNode::OctreeNode(vector<double> centre, double width, vector<vector<double>> rs, vector<double> ms) {
 	c = centre;
 	w = width;
@@ -41,6 +55,14 @@ OctreeNode::OctreeNode(vector<double> centre, double width, vector<vector<double
 			children.push_back(new OctreeNode(new_centres[i], new_width, selected_rs, selected_ms));
 		}
 		has_children = true;
+	}
+}
+
+OctreeNode::~OctreeNode() {
+	if (has_children) {
+		for (int i = 0; i < 8; i++) {
+			delete children[i];
+		}
 	}
 }
 

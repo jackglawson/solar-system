@@ -63,7 +63,7 @@ Simulation run_sim(vector<Particle*> particles) {
 	//	particles = generate_ics();
 	//}
 
-	// Simulation simulation{particles};
+	//Simulation simulation{particles};
 
 	double t = 0;
 	while (t < p::tot_t) {

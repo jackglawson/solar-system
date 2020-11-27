@@ -36,36 +36,34 @@ void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
     vector<vector<double>> acc(n);
     vector<vector<double>> rk1(n), rk2(n), rk3(n), rk4(n), rf(n);
     vector<vector<double>> vk1(n), vk2(n), vk3(n), vk4(n), vf(n);
-    Octree octree = Octree();
 
     // Zeroth intermediate step 
-    octree = Octree(rs, ms);
-    acc = octree.find_all_accs(rs, ms, radii);
+    Octree o0{ rs,ms };
+    acc = o0.find_all_accs(rs, ms, radii);
     rk1 = multiply_vector(vs, h);
     vk1 = multiply_vector(acc, h);
     rf = add_vectors(rs, multiply_vector(rk1, 0.5));
     vf = add_vectors(vs, multiply_vector(vk1, 0.5));
 
     // First intermediate step
-    // Do we lose pointers to allocated memory here?
-    octree = Octree(rf, ms);
-    acc = octree.find_all_accs(rf, ms, radii);
+    Octree o1{ rf,ms };
+    acc = o1.find_all_accs(rf, ms, radii);
     rk2 = multiply_vector(vs, h);
     vk2 = multiply_vector(acc, h);
     rf = add_vectors(rs, multiply_vector(rk2, 0.5));
     vf = add_vectors(vs, multiply_vector(vk2, 0.5));
     
     // Second intermediate step
-    octree = Octree(rf, ms);
-    acc = octree.find_all_accs(rf, ms, radii);
+    Octree o2{ rf, ms };
+    acc = o2.find_all_accs(rf, ms, radii);
     rk3 = multiply_vector(vs, h);
     vk3 = multiply_vector(acc, h);
     rf = add_vectors(rs, rk2);
     vf = add_vectors(vs, vk2);
 
     // Third intermediate step 
-    octree = Octree(rf, ms);
-    acc = octree.find_all_accs(rf, ms, radii);
+    Octree o3{ rf, ms };
+    acc = o3.find_all_accs(rf, ms, radii);
     rk4 = multiply_vector(vs, h);
     vk4 = multiply_vector(acc, h);
 

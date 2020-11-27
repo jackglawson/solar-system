@@ -37,6 +37,11 @@ Octree::Octree(vector<Particle> particles) {
 }
 
 
+Octree::~Octree() {
+	delete root;
+}
+
+
 vector<double> Octree::find_acc(vector<double> r, double m, double radius) {
 	if (p::qt == 0) {
 		throw logic_error("param qt has not been passed");

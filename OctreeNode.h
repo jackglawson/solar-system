@@ -17,7 +17,12 @@ private:
 	vector<OctreeNode*> children;
 
 public:
+	OctreeNode();
 	OctreeNode(vector<double> centre, double width, vector<vector<double>> rs, vector<double> ms);
+
+	~OctreeNode();
+	OctreeNode(const OctreeNode& that) = delete;
+	OctreeNode operator=(const OctreeNode& that) = delete;
 
 	void print();
 	void print_children();
