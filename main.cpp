@@ -24,8 +24,8 @@ int main() {
 	particles.push_back(&p1);
 	particles.push_back(&p2);	
 
-	Simulation sim = run_sim(particles);
-	//sim.save();
+	run_sim();
+	// sim.save();
 	// sim.print();
 	_CrtDumpMemoryLeaks();
 	return 0;

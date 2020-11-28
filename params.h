@@ -84,4 +84,7 @@ namespace p {
 									
 	// Octree settings
 	extern double qt;
+
+	// File settings
+	string sim_out;
 }

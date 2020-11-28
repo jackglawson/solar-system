@@ -74,7 +74,7 @@ namespace p {
 									// 1 ... constant density radius
 	
 	// Simulation parameters
-	double tot_t = 10;
+	double tot_t = 0.1;
 	double dt = 0.01;				// time between frames
 	double G = 1;
 	bool gravity_on = true;
@@ -99,4 +99,7 @@ namespace p {
 
 	// Octree settings
 	double qt = 1;
+
+	// File settings
+	string sim_out = "simulation.dat";
 }

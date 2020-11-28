@@ -81,19 +81,22 @@ double generate_m() {
 }
 
 
-vector<Particle> generate_ics() {
-	vector<Particle> particles;
+vector<Particle*> generate_ics() {
 	int n = p::num_particles - p::extra_particles.size();
+	vector<Particle*> particles(n, nullptr);
+
 
 	for (int i = 0; i < n; i++) {
-		vector<double> r = generate_r();
-		vector<double> v = generate_v(r);
-		double m = generate_m();
-		particles.push_back(Particle(r, v, m, p::radius_type));
+		vector<double> r{ generate_r() };
+		vector<double> v{ generate_v(r) };
+		double m{ generate_m() };
+		Particle* p = new Particle{ r, v, m, p::radius_type };
+		particles[i] = p;
 	}
 
+
 	for (int i = 0; i < p::extra_particles.size(); i++) {
-		particles.push_back(p::extra_particles[i]);
+		particles.push_back(&p::extra_particles[i]);
 	}
 
 	return particles;

@@ -13,4 +13,4 @@
 using namespace std;
 
 
-vector<Particle> generate_ics();
+vector<Particle*> generate_ics();
