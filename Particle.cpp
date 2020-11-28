@@ -17,18 +17,18 @@ Particle::Particle(vector<double> r_in, vector<double> v_in, double m_in, int ra
 }
 
 
-Particle::Particle(Particle p1, Particle p2) {
+Particle::Particle(Particle* p1, Particle* p2) {
 	// Two particle coalesce
-	double m1 = p1.get_m();
-	double m2 = p2.get_m();
+	double m1 = p1->get_m();
+	double m2 = p2->get_m();
 	m = m1 + m2;
 
-	vector<double> r1 = p1.get_r();
-	vector<double> r2 = p2.get_r();
+	vector<double> r1 = p1->get_r();
+	vector<double> r2 = p2->get_r();
 	r = vector<double>(3, 0);
 
-	vector<double> v1 = p1.get_v();
-	vector<double> v2 = p2.get_v();
+	vector<double> v1 = p1->get_v();
+	vector<double> v2 = p2->get_v();
 	v = vector<double>(3, 0);
 
 	for (int i = 0; i < 3; i++) {
@@ -37,11 +37,11 @@ Particle::Particle(Particle p1, Particle p2) {
 	}
 
 
-	if (p1.get_radius_type() == 0 or p2.get_radius_type() == 0) {
+	if (p1->get_radius_type() == 0 or p2->get_radius_type() == 0) {
 		radius_type = 0;
 	}
-	else if (p1.get_radius_type() == p2.get_radius_type()) {
-		radius_type = p1.get_radius_type();
+	else if (p1->get_radius_type() == p2->get_radius_type()) {
+		radius_type = p1->get_radius_type();
 	}
 	else {
 		cout << "Case not handled yet";

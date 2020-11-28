@@ -58,7 +58,7 @@ namespace RadiiFunctions {
 
 namespace p {
 	// Initial condition parameters
-	int num_particles = 10;			// including extra particles
+	int num_particles = 200;			// including extra particles
 	double min_m = 0.1;
 	double max_m = 1;
 	int icr_type = 1;				// 0 ... uniform sphere
@@ -74,7 +74,7 @@ namespace p {
 									// 1 ... constant density radius
 	
 	// Simulation parameters
-	double tot_t = 0.1;
+	double tot_t = 1;
 	double dt = 0.01;				// time between frames
 	double G = 1;
 	bool gravity_on = true;

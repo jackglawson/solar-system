@@ -74,6 +74,7 @@ def animate_top_side(df,
     def update_screen(i):
         """update function for FuncAnimation"""
         t = timestamps[i * display_rate]
+        print(f"Drawing t = {t}")
         N = len(df[df.timestamp == t])
 
         xs = tuple(df[df.timestamp == t].rx)

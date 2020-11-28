@@ -73,14 +73,14 @@ unordered_set<vector<int>, VectorHash> sweep_and_prune(vector<vector<double>> bo
 }
 
 
-bool check_collision(Particle p1, Particle p2) {
+bool check_collision(Particle* p1, Particle* p2) {
 	// Check if two particles actually collide
-	double d = dist(p1.get_r(), p2.get_r());
-	return d < p1.get_radius() + p2.get_radius();
+	double d = dist(p1->get_r(), p2->get_r());
+	return d < p1->get_radius() + p2->get_radius();
 }
 
 
-vector<int> find_colliding_pair(vector<Particle> particles) {
+vector<int> find_colliding_pair(vector<Particle*> particles) {
 	// Searches for collisions between particles. Stops when the first colliding pair is found.
 	// Returns vector<int>{0,0} if there are no collisions.
 	// The algorithm first checks if particles are *potentially intersecting*.
@@ -92,10 +92,10 @@ vector<int> find_colliding_pair(vector<Particle> particles) {
 	vector<vector<double>> z_bounds(particles.size(), vector<double>{0, 0});
 
 	for (int i = 0; i < particles.size(); i++) {
-		Particle p = particles[i];
-		x_bounds[i] = vector<double>{ p.get_r()[0] - p.get_radius(), p.get_r()[0] + p.get_radius() };
-		y_bounds[i] = vector<double>{ p.get_r()[1] - p.get_radius(), p.get_r()[1] + p.get_radius() };
-		z_bounds[i] = vector<double>{ p.get_r()[2] - p.get_radius(), p.get_r()[2] + p.get_radius() };
+		Particle* p = particles[i];
+		x_bounds[i] = vector<double>{ p->get_r()[0] - p->get_radius(), p->get_r()[0] + p->get_radius() };
+		y_bounds[i] = vector<double>{ p->get_r()[1] - p->get_radius(), p->get_r()[1] + p->get_radius() };
+		z_bounds[i] = vector<double>{ p->get_r()[2] - p->get_radius(), p->get_r()[2] + p->get_radius() };
 	}
 
 	unordered_set<vector<int>, VectorHash> x_collisions = sweep_and_prune(x_bounds);
@@ -116,7 +116,7 @@ vector<int> find_colliding_pair(vector<Particle> particles) {
 }
 
 
-void do_collisions(vector<Particle>& particles) {
+void do_collisions(vector<Particle*>& particles) {
 	// while there are still colliding particles
 	for (int i = 0; i < p::max_collision_checks; i++) {
 		vector<int> pair = find_colliding_pair(particles);
@@ -124,13 +124,20 @@ void do_collisions(vector<Particle>& particles) {
 			return;
 		}
 
-		cout << "Particles " << pair[0] << " and " << pair[1] << " are colliding\n";
-
 		sort(pair.begin(), pair.end());
-		Particle p1 = particles[pair[0]];
-		Particle p2 = particles[pair[1]];
+		Particle* p1 = particles[pair[0]];
+		Particle* p2 = particles[pair[1]];
+
+		Particle* p = new Particle{ p1,p2 };
+
+		delete p1;
+		delete p2;
+
 		particles.erase(particles.begin() + pair[1]);
 		particles.erase(particles.begin() + pair[0]);
-		particles.push_back(Particle(p1, p2));
+
+		particles.push_back(p);
+
+		cout << "A collision occured. " << particles.size() << " particles remain.\n";
 	}
 }

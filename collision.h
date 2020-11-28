@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+#ifdef _DEBUG
+#define new new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#else
+#define new new
+#endif
+
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
@@ -12,4 +18,4 @@
 using namespace std;
 
 
-void do_collisions(vector<Particle>& particles);
+void do_collisions(vector<Particle*>& particles);

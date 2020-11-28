@@ -128,20 +128,25 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     int n = y.size();
 
     // Declare local arrays
-    vector<Particle*> y0(n), y1(n);
+    vector<Particle*> y0(n, nullptr);
+    vector<Particle*> y1(n, nullptr);
 
     // Declare repetition counter
     static int count = 0;
 
     // Save initial data
     double t0 = t;
-    y0 = y;
+    for (int i = 0; i < n; i++) {
+        y0[i] = new Particle(*y[i]);
+    }
 
-    // Take full step 
+    // Take full step
     rk4_fixed_step(t, y, h);
 
     // Save data
-    y1 = y;
+    for (int i = 0; i < n; i++) {
+        y1[i] = new Particle(*y[i]);
+    }
 
     // Restore initial data 
     t = t0;
@@ -185,14 +190,14 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
         // Use mixed truncation error 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 3; j++) {
-                Particle p = *y[i];
-                Particle p1 = *y1[i];
-                r_err = fabs((p.get_r()[j] - p1.get_r()[j]) / p.get_r()[j]);
-                v_err = fabs((p.get_v()[j] - p1.get_v()[j]) / p.get_v()[j]);
+                Particle* p = y[i];
+                Particle* p1 = y1[i];
+                r_err = fabs((p->get_r()[j] - p1->get_r()[j]) / p->get_r()[j]);
+                v_err = fabs((p->get_v()[j] - p1->get_v()[j]) / p->get_v()[j]);
                 err1 = (r_err > v_err) ? r_err : v_err;
 
-                r_err = fabs(p.get_r()[j] - p1.get_r()[j]);
-                v_err = fabs(p.get_v()[j] - p1.get_v()[j]);
+                r_err = fabs(p->get_r()[j] - p1->get_r()[j]);
+                v_err = fabs(p->get_v()[j] - p1->get_v()[j]);
                 err2 = (r_err > v_err) ? r_err : v_err;
 
                 err = (err1 < err2) ? err1 : err2;
