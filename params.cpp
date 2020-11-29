@@ -58,7 +58,7 @@ namespace RadiiFunctions {
 
 namespace p {
 	// Initial condition parameters
-	int num_particles = 5;			// including extra particles
+	int num_particles = 1000;		// including extra particles
 	double min_m = 0.01;
 	double max_m = 0.2;
 	int icr_type = 1;				// 0 ... uniform sphere
@@ -85,11 +85,13 @@ namespace p {
 
 	// Integration settings
 	double acc = 0.001;				// desired truncation error per step. The truncation error is absolute. 
-	double S = 10;					// step-length cannot change by more than this factor from step to step
+	double S = 10.0;				// step-length cannot change by more than this factor from step to step
 	int maxrept = 10;				// maximum allowable number of step recalculations
-	double h_min = 0.000001;		// minimum allowable step-length
-	double h_max = 1;				// maximum allowable step-length
-	double h_drop_factor = 0.9;		// if the truncation error of a step is unacceptable, do multiply h by this before re-trying
+	double h_start = 0.0001;		// length of first step.
+	double h_warn = 0.00001;		// warn the user if step-length falls below this
+	double h_min = 0.0;				// minimum allowable step-length
+	double h_max = 1.0;				// maximum allowable step-length
+	double h_drop_factor = 0.7;		// if the truncation error of a step is unacceptable, multiply h by this before re-trying
 
 
 	// Collision settings

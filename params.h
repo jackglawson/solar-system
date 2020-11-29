@@ -81,6 +81,8 @@ namespace p {
 	extern double acc;
 	extern double S;
 	extern int maxrept;
+	extern double h_start;
+	extern double h_warn;
 	extern double h_min;
 	extern double h_max;
 	extern double h_drop_factor;

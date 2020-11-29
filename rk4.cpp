@@ -2,14 +2,14 @@
 
 
 vector<Particle*> walk_to(double t_from, double t_to, vector<Particle*> y) {
-    double h = p::h_min;
+    double h = p::h_start;
     double t_err = 0;
     int rept = 0;
 
     double t = t_from;
 
     while (t < t_to) {
-        rk4_adaptive_step(t, y, h, t_err, p::acc, p::S, rept, p::maxrept, p::h_min, p::h_max, p::flag);
+        rk4_adaptive_step(t, y, h, t_err, rept);
         if (p::collisions_on) {do_collisions(y);}
         //cout << "Stepping to t = " << t << "\n";
     }

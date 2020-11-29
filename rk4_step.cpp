@@ -85,10 +85,7 @@ void rk4_fixed_step(double& t, vector<Particle*>& y, double h) {
 }
 
 
-void rk4_adaptive_step(double& t, vector<Particle*>& y,
-    double& h, double& t_err, double acc,
-    double S, int& rept, int maxrept,
-    double h_min, double h_max, int flag)
+void rk4_adaptive_step(double& t, vector<Particle*>& y, double& h, double& t_err, int& rept)
 {
     /*
       Function to advance set of coupled first-order o.d.e.s by single step
@@ -105,7 +102,6 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
          maxrept ... maximum allowable number of step recalculations
          h_min   ... minimum allowable step-length
          h_max   ... maximum allowable step-length
-         flag    ... controls manner in which truncation error is calculated
 
       Requires right-hand side routine
 
@@ -114,11 +110,7 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
       which evaluates derivatives of y (w.r.t. x) in array dydx.
 
       Function advances equations by single step whilst attempting to maintain
-      constant truncation error per step of acc:
-
-        flag = 0 ... error is absolute
-        flag = 1 ... error is relative
-        flag = 2 ... error is mixed
+      constant truncation error per step of acc.
 
       If step-length falls below h_min then routine aborts
     */
@@ -177,28 +169,34 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     if (t_err == 0.) t_err = 1.e-15;
 
     // Calculate new step-length 
-    double h_est = h * pow(fabs(acc / t_err), 0.2);
+    double h_est = h * pow(fabs(p::acc / t_err), 0.2);
 
     // Prevent step-length from changing by more than factor S
-    if (h_est / h > S)
-        h *= S;
-    else if (h_est / h < 1. / S)
-        h /= S;
+    if (h_est / h > p::S)
+        h *= p::S;
+    else if (h_est / h < 1. / p::S)
+        h /= p::S;
     else
         h = h_est;
 
     // Prevent step-length from exceeding h_max
-    h = (fabs(h) > h_max) ? h_max * h / fabs(h) : h;
+    h = (fabs(h) > p::h_max) ? p::h_max * h / fabs(h) : h;
 
     // Abort if step-length falls below h_min
-    if (fabs(h) < h_min)
+    if (fabs(h) < p::h_min)
     {
-        printf("Error - |h| < hmin\n");
+        cout << "Error - |h| < hmin\n";
         exit(1);
     }
 
+    // Warn if step-length falls below h_warn
+    if (fabs(h) < p::h_warn)
+    {
+        cout << "WARNING: h < " << p::h_warn << "\n";
+    }
+
     // If truncation error acceptable take step 
-    if ((t_err <= acc) || (count >= maxrept))
+    if ((t_err <= p::acc) || (count >= p::maxrept))
     {
         cout << "Truncation error is acceptable. Taking step of length " << h << ".\n";
         rept = count;
@@ -214,8 +212,7 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
             *y[i] = *y0[i];
         }
         h *= p::h_drop_factor;
-        rk4_adaptive_step(t, y, h, t_err, acc,
-            S, rept, maxrept, h_min, h_max, flag);
+        rk4_adaptive_step(t, y, h, t_err, rept);
     }
 
     for (int i = 0; i < n; i++) {
