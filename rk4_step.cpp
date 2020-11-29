@@ -161,52 +161,15 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     // Calculate truncation error
     t_err = 0.;
     double r_err, v_err, err, err1, err2;
-    if (flag == 0)
-    {
-        // Use absolute truncation error 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < 3; j++) {
-                Particle* p = y[i];
-                Particle* p1 = y1[i];
-                r_err = fabs(p->get_r()[j] - p1->get_r()[j]);
-                v_err = fabs(p->get_v()[j] - p1->get_v()[j]);
-                err = (r_err > v_err) ? r_err : v_err;
-                t_err = (err > t_err) ? err : t_err;
-            }
-        }
-    }
-    else if (flag == 1)
-    {
-        // Use relative truncation error
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < 3; j++) {
-                Particle* p = y[i];
-                Particle* p1 = y1[i];
-                r_err = fabs((p->get_r()[j] - p1->get_r()[j]) / p->get_r()[j]);
-                v_err = fabs((p->get_v()[j] - p1->get_v()[j]) / p->get_v()[j]);
-                err = (r_err > v_err) ? r_err : v_err;
-                t_err = (err > t_err) ? err : t_err;
-            }
-        }
-    }
-    else
-    {
-        // Use mixed truncation error 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < 3; j++) {
-                Particle* p = y[i];
-                Particle* p1 = y1[i];
-                r_err = fabs((p->get_r()[j] - p1->get_r()[j]) / p->get_r()[j]);
-                v_err = fabs((p->get_v()[j] - p1->get_v()[j]) / p->get_v()[j]);
-                err1 = (r_err > v_err) ? r_err : v_err;
 
-                r_err = fabs(p->get_r()[j] - p1->get_r()[j]);
-                v_err = fabs(p->get_v()[j] - p1->get_v()[j]);
-                err2 = (r_err > v_err) ? r_err : v_err;
-
-                err = (err1 < err2) ? err1 : err2;
-                t_err = (err > t_err) ? err : t_err;
-            }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < 3; j++) {
+            Particle* p = y[i];
+            Particle* p1 = y1[i];
+            r_err = fabs(p->get_r()[j] - p1->get_r()[j]);
+            v_err = fabs(p->get_v()[j] - p1->get_v()[j]);
+            err = (r_err > v_err) ? r_err : v_err;
+            t_err = (err > t_err) ? err : t_err;
         }
     }
 
@@ -237,17 +200,20 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     // If truncation error acceptable take step 
     if ((t_err <= acc) || (count >= maxrept))
     {
+        cout << "Truncation error is acceptable. Taking step of length " << h << ".\n";
         rept = count;
         count = 0;
     }
     // If truncation error unacceptable repeat step 
     else
     {
+        cout << "Truncation error is not acceptable. Step length is "<< h << ".\n";
         count++;
         t = t0;
         for (int i = 0; i < n; i++) {
             *y[i] = *y0[i];
         }
+        h *= p::h_drop_factor;
         rk4_adaptive_step(t, y, h, t_err, acc,
             S, rept, maxrept, h_min, h_max, flag);
     }

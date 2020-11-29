@@ -83,7 +83,7 @@ namespace p {
 	extern int maxrept;
 	extern double h_min;
 	extern double h_max;
-	extern int flag;
+	extern double h_drop_factor;
 
 	// Collision settings
 	extern int max_collision_checks;
