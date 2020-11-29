@@ -6,4 +6,4 @@ df = read_data()
 
 display_size = 10
 filename = "animation.mp4"
-animate_top_side(df, display_size=display_size, filename=filename)
+animate_top_side(df, display_size=display_size, filename=filename, fps=15)

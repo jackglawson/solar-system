@@ -150,7 +150,9 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
 
     // Restore initial data 
     t = t0;
-    y = y0;
+    for (int i = 0; i < n; i++) {
+        *y[i] = *y0[i];
+    }
 
     // Take two half-steps 
     rk4_fixed_step(t, y, h / 2.);
@@ -241,12 +243,20 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     {
         count++;
         t = t0;
-        y = y0;
+        for (int i = 0; i < n; i++) {
+            *y[i] = *y0[i];
+        }
         rk4_adaptive_step(t, y, h, t_err, acc,
             S, rept, maxrept, h_min, h_max, flag);
     }
 
+    for (int i = 0; i < n; i++) {
+        delete y0[i];
+        delete y1[i];
+    }
+
     y0.clear();
+    y1.clear();
 
     return;
 }

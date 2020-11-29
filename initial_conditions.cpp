@@ -24,7 +24,7 @@ vector<double> generate_r_uniform_sphere() {
 
 
 vector<double> generate_r_uniform_disc() {
-	double phi = random_uniform(0, M_PI);
+	double phi = random_uniform(0, 2*M_PI);
 	double radius = ICr::UniformDisc::max_r * sqrt(random_uniform(0, 1));
 
 	double x = radius * cos(phi);
@@ -41,6 +41,9 @@ vector<double> generate_r() {
 		return generate_r_uniform_sphere();
 	case 1:
 		return generate_r_uniform_disc();
+	default:
+		cout << "Invalid ICR\n";
+		exit(1);
 	}
 }
 
