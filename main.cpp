@@ -14,19 +14,7 @@
 
 
 int main() {
-	// leaking memory in octree! 
-
-	vector<Particle*> particles;
-
-	Particle p1 = Particle(vector<double>{0, 0, 0}, vector<double>{0, 0, 0}, 1000, 0);
-	Particle p2 = Particle(vector<double>{5, 0, 0}, vector<double>{0, 20, 0}, 1, 0);
-
-	particles.push_back(&p1);
-	particles.push_back(&p2);	
-
 	run_sim();
-	// sim.save();
-	// sim.print();
 	_CrtDumpMemoryLeaks();
 	return 0;
 }

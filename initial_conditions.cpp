@@ -88,7 +88,6 @@ vector<Particle*> generate_ics() {
 	int n = p::num_particles - p::extra_particles.size();
 	vector<Particle*> particles(n, nullptr);
 
-
 	for (int i = 0; i < n; i++) {
 		vector<double> r{ generate_r() };
 		vector<double> v{ generate_v(r) };
@@ -101,6 +100,8 @@ vector<Particle*> generate_ics() {
 	for (int i = 0; i < p::extra_particles.size(); i++) {
 		particles.push_back(&p::extra_particles[i]);
 	}
+
+	do_collisions(particles);
 
 	return particles;
 }

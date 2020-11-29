@@ -112,12 +112,12 @@ vector<int> find_colliding_pair(vector<Particle*> particles) {
 			}
 		}
 	}
-	return vector<int>{0, 0};
+	return vector<int>{0, 0};  // If no collisions
 }
 
 
 void do_collisions(vector<Particle*>& particles) {
-	// while there are still colliding particles
+	// While there are still colliding particles
 	for (int i = 0; i < p::max_collision_checks; i++) {
 		vector<int> pair = find_colliding_pair(particles);
 		if (pair == vector<int>{0, 0}) {

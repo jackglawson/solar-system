@@ -1,6 +1,6 @@
 #include "rk4_step.h"
 
-void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
+void rk4_fixed_step(double& t, vector<Particle*>& y, double h) {
     /*
       Function to advance set of coupled first-order o.d.e.s by single step
       using fixed step-length fourth-order Runge-Kutta scheme
@@ -17,7 +17,7 @@ void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
     */
 
     // Array y assumed to be of extent n, where n is no. of coupled equations
-    int n = particles.size();
+    int n = y.size();
 
     // extract data from particles
     vector<vector<double>> rs(n);
@@ -25,7 +25,7 @@ void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
     vector<double> ms(n);
     vector<double> radii(n);
     for (int i = 0; i < n; i++) {
-        Particle p = *particles[i];
+        Particle p = *y[i];
         rs[i] = p.get_r();
         vs[i] = p.get_v();
         ms[i] = p.get_m();
@@ -75,8 +75,8 @@ void rk4_fixed_step(double& t, vector<Particle*>& particles, double h) {
             new_r[j] = rs[i][j] + rk1[i][j] / 6. + rk2[i][j] / 3. + rk3[i][j] / 3. + rk4[i][j] / 6.;
             new_v[j] = vs[i][j] + vk1[i][j] / 6. + vk2[i][j] / 3. + vk3[i][j] / 3. + vk4[i][j] / 6.;
         }
-        particles[i]->set_r(new_r);
-        particles[i]->set_v(new_v);
+        y[i]->set_r(new_r);
+        y[i]->set_v(new_v);
     }
 
     t += h;
@@ -164,11 +164,12 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     if (flag == 0)
     {
         // Use absolute truncation error 
-        // wont work!
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 3; j++) {
-                r_err = fabs(y[i]->get_r()[j] - y1[i]->get_r()[j]);
-                v_err = fabs(y[i]->get_v()[j] - y1[i]->get_v()[j]);
+                Particle* p = y[i];
+                Particle* p1 = y1[i];
+                r_err = fabs(p->get_r()[j] - p1->get_r()[j]);
+                v_err = fabs(p->get_v()[j] - p1->get_v()[j]);
                 err = (r_err > v_err) ? r_err : v_err;
                 t_err = (err > t_err) ? err : t_err;
             }
@@ -177,11 +178,12 @@ void rk4_adaptive_step(double& t, vector<Particle*>& y,
     else if (flag == 1)
     {
         // Use relative truncation error
-        // wont work!
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 3; j++) {
-                r_err = fabs((y[i]->get_r()[j] - y1[i]->get_r()[j]) / y[i]->get_r()[j]);
-                v_err = fabs((y[i]->get_v()[j] - y1[i]->get_v()[j]) / y[i]->get_v()[j]);
+                Particle* p = y[i];
+                Particle* p1 = y1[i];
+                r_err = fabs((p->get_r()[j] - p1->get_r()[j]) / p->get_r()[j]);
+                v_err = fabs((p->get_v()[j] - p1->get_v()[j]) / p->get_v()[j]);
                 err = (r_err > v_err) ? r_err : v_err;
                 t_err = (err > t_err) ? err : t_err;
             }

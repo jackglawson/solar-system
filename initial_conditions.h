@@ -10,6 +10,7 @@
 #include <cmath>
 #include "Particle.h"
 #include "params.h"
+#include "collision.h"
 using namespace std;
 
 
