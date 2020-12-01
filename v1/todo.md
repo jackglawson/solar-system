@@ -19,14 +19,3 @@ make different types of galaxy
 black holes - high density
 
 astro fluids - density distribution of a galaxy?
-
-
-## TODAY:
-
-time analysis on octree
-
-smarter octree - do we have to recreate it every time. can we just make some adjustments?
-
-LEARN C++
-
-simulate spiral galaxy - different densities
